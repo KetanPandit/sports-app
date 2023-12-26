@@ -33,20 +33,20 @@ jobs:
           delete-branch: true
 
       - name: Approve Pull Request1
-        uses: juliangruber/approve-pull-request-action@v1
+        uses: KetanPandit/approve-pull-request-action@v1
         with:
-          github-token: ${{ secrets.APPROVER_DEMO }}
+          github-token: ${{ secrets.SECKET }}
           number: ${{ steps.demo-1.outputs.pull-request-number }}
 
       - name: Merge Pull request1
-        uses: juliangruber/merge-pull-request-action@v1
+        uses: KetanPandit/approve-pull-request-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.SECKET }}
           number: ${{ steps.demo-1.outputs.pull-request-number }}
           method: squash
 
       - name: Update author information again
-        run: echo Gaurav > AUTHOR
+        run: echo ketan > AUTHOR
 
       - name: Raise PR 2
         id: demo-2
