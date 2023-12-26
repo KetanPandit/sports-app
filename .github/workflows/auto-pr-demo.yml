@@ -63,7 +63,7 @@ jobs:
           delete-branch: true
 
       - name: Approve Pull Request2
-        uses: KetanPandit/approve-pull-request-action@v1
+        uses: juliangruber/approve-pull-request-action@v1
         with:
           github-token: ${{ secrets.SECKET }}
           number: ${{ steps.demo-2.outputs.pull-request-number }}
@@ -71,6 +71,6 @@ jobs:
       - name: Merge Pull request2
         uses: juliangruber/merge-pull-request-action@v1
         with:
-          github-token: ${{ secrets.SECKET }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           number: ${{ steps.demo-2.outputs.pull-request-number }}
           method: squash
