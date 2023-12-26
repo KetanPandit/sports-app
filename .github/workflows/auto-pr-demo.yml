@@ -1,53 +1,21 @@
-name: Automerge1
+name: Dependabot auto-approve
+on: pull_request
 
-on:
-  # Try enabling auto-merge for all open pull requests. (Only recommended for testing.)
-  push:
-
-  # Try enabling auto-merge for all open pull requests.
-  schedule:
-    - cron: 0 * * * *
-
-  # Try enabling auto-merge when a pull request is approved. Note that this event skips the check
-  # for the pull request author association and instead checks the review author association.
-  pull_request_review:
-    types:
-      - submitted
-
-  # Try enabling auto-merge for a pull request when a draft is marked as “ready for review”, when
-  # a required label is applied or when a “do not merge” label is removed, or when a pull request
-  # is updated in any way (opened, synchronized, reopened, edited).
-  pull_request_target:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - edited
-      - labeled
-      - unlabeled
-      - ready_for_review
-
-  # Try enabling auto-merge for the specified pull request, review or all open pull requests if
-  # none is specified.
-  workflow_dispatch:
-    inputs:
-      pull-request:
-        description: Pull Request Number
-        required: false
-      review:
-        description: Review ID
-        required: false
+permissions:
+  pull-requests: write
 
 jobs:
-  automerge:
+  dependabot:
     runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: reitermarkus/automerge@v2
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
         with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
-          merge-method: rebase
-          do-not-merge-labels: never-merge
-          required-labels: automerge
-          pull-request: ${{ github.event.inputs.pull-request }}
-          review: ${{ github.event.inputs.review }}
-          dry-run: true
+          github-token: "${{ secrets.MY_GITHUB_TOKEN }}"
+      - name: Approve a PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.MY_GITHUB_TOKEN}}
